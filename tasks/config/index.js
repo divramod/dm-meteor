@@ -9,8 +9,6 @@ var job = {};
 job.start = co.wrap(function*() {
     try {
         console.log("start config");
-        //dmNpm.addConfigFile("~/.dm-meteor.json", "{\n}");
-        //console.log(dmNpm.addConfigFile);
         dmNpm.addConfigFile("~/.dm-meteor.json", "{\n}");
     } catch (e) {
         console.log("Filename: ", __filename, "\n", e.stack);

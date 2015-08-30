@@ -1,6 +1,5 @@
 Current
 ====================
-8. create .dm-meteor.json
 
 Next Actions
 ====================
@@ -14,3 +13,4 @@ Next Actions
 
 Change Log
 ====================
+8. create .dm-meteor.json (2015.08.30)
