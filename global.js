@@ -22,6 +22,11 @@ jobs.index = co.wrap(function*() {
             var task = require("./tasks/test/index.js");
             yield task.start();
         }
+        // =========== [ test ] ===========
+        else if (["config", "-config", "c", "-c"].indexOf(argv2) > -1) {
+            var task = require("./tasks/config/index.js");
+            yield task.start();
+        }
         // =========== [ help ] ===========
         else {
             var task = require("./tasks/help/index.js");
