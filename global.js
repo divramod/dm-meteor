@@ -27,6 +27,16 @@ jobs.index = co.wrap(function*() {
             var task = require("./tasks/config/index.js");
             yield task.start();
         }
+        // =========== [ test ] ===========
+        else if (["createKey", "key"].indexOf(argv2) > -1) {
+            var task = require("./tasks/createKey/index.js");
+            yield task.start();
+        }
+        // =========== [ test ] ===========
+        else if (["buildApp", "build"].indexOf(argv2) > -1) {
+            var task = require("./tasks/buildApp/index.js");
+            yield task.start();
+        }
         // =========== [ help ] ===========
         else {
             var task = require("./tasks/help/index.js");
