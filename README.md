@@ -19,6 +19,7 @@ npm install dm-meteor -g
 
 ### cli
 * will make it possible to run the different meteor commands from nodejs
+* you have to be in  
 * examples 
 ```javascript
 alias cli // 
