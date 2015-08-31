@@ -17,7 +17,7 @@ job.start = co.wrap(function*() {
     try {
         console.log("start buildApp");
 
-        //TODO aks for target server name, default  mobile-config.js App.info server
+        //aks for target server name, default  mobile-config.js App.info server
         if (test('-f', 'config.json')) {
             var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
             //console.log(config);
@@ -27,7 +27,7 @@ job.start = co.wrap(function*() {
             console.log(message.red);
         }
 
-        // TODO ask for build destination, default ?
+        // ask for build destination, default ?
         var build = true;
         if (config.buildDestination) {
             var destination = path.resolve(pwd(), config.buildDestination);
@@ -87,9 +87,9 @@ job.start = co.wrap(function*() {
             var versions =
                 yield dmNpm.bumpVersion("config.json");
             yield dmNpm.bumpVersion("mobile-config.js", versions.release_type, versions.old);
+            yield dmNpm.bumpVersion("client/lib/constants.ng.js", versions.release_type, versions.old);
 
-
-            //TODO meteor build 
+            // meteor build 
             // =========== [ build ] ===========
 
             // =========== [ sign: get key before build run so that i can do other things in the meantime ] ===========
@@ -138,7 +138,7 @@ job.start = co.wrap(function*() {
                 var message = "keystore file " + keystorePath.red + " is not existent";
                 console.log(message);
             } else {
-                var command = "jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore " + keystorePath +" " + unsignedApkPath + " kegelapp";
+                var command = "jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore " + keystorePath + " " + unsignedApkPath + " kegelapp";
                 shspawn(command);
             }
 
