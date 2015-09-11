@@ -1,4 +1,3 @@
-
 var co = require("co");
 var jobs = {};
 
@@ -9,14 +8,21 @@ jobs.index = co.wrap(function*() {
         // =========== [ get params from user input ] ===========
         var argv2 = process.env.dmnJob || process.argv[2] || "help";
 
-        // =========== [ test ] ===========
-        if (["test", "-test", "t", "-t"].indexOf(argv2) > -1) {
-            var task = require("./tasks/test/index.js");
-            yield task.start();
+
+        // =========== [ initProjectBlaze ] ===========
+        if (['initProjectBlaze','ipb'].indexOf(argv2) > -1) {
+            var task = require("./tasks/initProjectBlaze/index.js");
+            task.start();
         }
 
         // automatically add tasks here
+        
 
+        // =========== [ routeAdd ] ===========
+        else if (['routeAdd','ra'].indexOf(argv2) > -1) {
+            var task = require("./tasks/routeAdd/index.js");
+            task.start();
+        }
         // =========== [ createKey ] ===========
         else if (["createKey", "key"].indexOf(argv2) > -1) {
             var task = require("./tasks/createKey/index.js");

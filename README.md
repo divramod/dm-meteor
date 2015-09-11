@@ -18,6 +18,128 @@ npm install dm-meteor -g
 
 ## Tasks
 
+### [routeAdd](tasks/routeAdd/index.js)
+* Adds a route to a meteor application
+
+#### routeAdd global usage
+```
+dmm [routeAdd|ra]
+```
+
+#### routeAdd programmatically usage
+```javascript
+var routeAdd = require("dm-meteor").routeAdd;
+var routeAddResult = routeAdd.start();
+```
+
+#### routeAdd steps
+
+#### routeAdd features
+
+#### routeAdd config
+```javascript
+{
+    "routeAdd": {
+    }
+}
+```
+
+### [initProjectBlaze](tasks/initProjectBlaze/index.js)
+* Initializes a project thats based on the blaze template engine.
+
+#### initProjectBlaze global usage
+```
+dmm [initProjectBlaze|ipb]
+```
+
+#### folder structure
+```
+/
+|-- .meteor/
+|-- client/
+    |-- lib/
+        |-- subscriptions.js
+    |-- styles/
+        |-- templates/
+            |-- one/
+                |-- one.less
+            |-- two/
+                |-- two.less
+    |-- views/
+        |-- blocks/
+            |-- footer/
+                |-- footer.events.js
+                |-- footer.helpers.js
+                |-- footer.html
+                |-- footer.less
+            |-- header/
+                |-- header.events.js
+                |-- header.helpers.js
+                |-- header.html
+                |-- header.less
+            |-- layout/
+                |-- layout.events.js
+                |-- layout.helpers.js
+                |-- layout.html
+                |-- layout.less
+        |-- common/
+            |-- styles/
+                |-- app.less
+            |-- js/
+                |-- app.events.js
+                |-- app.helpers.js
+            |-- templates/
+        |-- routes/
+            |-- about/
+                |-- about.events.js
+                |-- about.helpers.js
+                |-- about.html
+                |-- about.less
+            |-- home/
+                |-- home.events.js
+                |-- home.helpers.js
+                |-- home.html
+                |-- home.less
+            |-- user/
+                |-- user.events.js
+                |-- user.helpers.js
+                |-- user.html
+                |-- user.less
+    |-- routes.js
+|-- lib/
+    |-- collections.js
+|-- private/
+|-- public/
+    |-- fonts/
+    |-- images/
+    |-- robots.txt
+|-- server/
+    |-- publications.js
+    |-- security.js
+    |-- server.js
+|-- .gitignore
+|-- LICENSE
+```
+
+
+#### initProjectBlaze programmatically usage
+```javascript
+var initProjectBlaze = require("dm-meteor").initProjectBlaze;
+var initProjectBlazeResult = initProjectBlaze.start();
+```
+
+#### initProjectBlaze steps
+
+#### initProjectBlaze features
+
+#### initProjectBlaze config
+```javascript
+{
+    "initProjectBlaze": {
+    }
+}
+```
+
 ### cli
 * will make it possible to run the different meteor commands from nodejs
 * you have to be in  

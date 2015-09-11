@@ -3,31 +3,32 @@ var co = require("co");
 var dmPrompt = require("dm-prompt").Inquirer;
 var dmPath = require("dm-path");
 var colors = require("colors");
+var spawn = require("dm-shell").spawn;
 require("shelljs/global");
 
 // =========== [ MODULE DEFINE ] ===========
 var job = {};
 
 // =========== [ job.start() ] ===========
-job.start = co.wrap(function*(keyname, keypath) {
+job.start = co.wrap(function*(keyName, keyPath) {
     try {
-        var keyname = keyname || process.argv[3] || undefined;
-        var keypath = keypath || process.argv[4] || undefined;
+        var keyName = keyName || process.argv[3] || undefined;
+        var keyPath = keyPath || process.argv[4] || undefined;
 
-        // =========== [ proof if keyname is passed ] ===========
-        if (!keyname) {
-            var keynameAnswer =
+        // =========== [ proof if keyName is passed ] ===========
+        if (!keyName) {
+            var keyNameAnswer =
                 yield dmPrompt({
                     type: "input",
-                    name: "keyname",
-                    message: "You didn't passed a keyname. Whats your keyname?"
+                    name: "keyName",
+                    message: "You didn't passed a keyName. Whats your keyName?"
                 });
-            keyname = keynameAnswer.keyname;
-            console.log(keyname);
+            keyName = keyNameAnswer.keyName;
+            console.log(keyName);
         }
 
-        // =========== [ create keypath ] ===========
-        if (!keypath) {
+        // =========== [ create keyPath ] ===========
+        if (!keyPath) {
             // ask for path
             var pathAnswer =
                 yield dmPrompt({
@@ -36,29 +37,38 @@ job.start = co.wrap(function*(keyname, keypath) {
                     message: "Where do you want to store the key? [default: ~/.keystore directory]"
                 });
             var keyPath = pathAnswer.path;
-        }
-        if (keyPath === "") {
-            keyPath = env['home'] + '/.keystore/' + keyname;
+            if (keyPath === "") {
+                keyPath = env['home'] + '/.keystore/' + keyName;
+            }
         } else {
             keyPath = dmPath.replace(keyPath);
         }
-        var keyPath = '/home/mod/.keystore/' + keyname;
 
+        var createKey = true;
         // =========== [ proof if key exists ] ===========
         if (test("-f", keyPath)) {
+            createKey = false;
             var message = 'The key ' + keyPath.red + ' already exists!';
             console.log(message);
-        } else {
-
-            // =========== [ create key ] ===========
-            var command = 'keytool -genkey -alias ' + keyname + ' -keyalg RSA -keysize 2048 -validity 10000 -keystore ' + keyPath;
-            var spawn = require('child_process').spawn;
-            function shspawn(command) {
-                spawn('sh', ['-c', command], {
-                    stdio: 'inherit'
+            var overwriteAnswer =
+                yield dmPrompt({
+                    type: "input",
+                    name: "overwrite",
+                    message: "Do you want to overwrite the [Yes]?"
                 });
+            var overwrite = overwriteAnswer.overwrite;
+            if (overwrite === "Yes") {
+                createKey = true;
+                var command = "rm " + keyPath;
+                spawn(keyPath);
             }
-            shspawn(command);
+        }
+
+        if (createKey === true) {
+            // =========== [ create key ] ===========
+            var command = 'keytool -genkey -alias ' + keyName + ' -keyalg RSA -keysize 2048 -validity 10000 -keystore ' + keyPath;
+
+            spawn(command);
         }
     } catch (e) {
         console.log("Filename: ", __filename, "\n", e.stack);

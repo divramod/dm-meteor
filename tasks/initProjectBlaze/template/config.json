@@ -1,0 +1,7 @@
+{
+    "version": "0.0.0",
+    "server": "SERVER",
+    "buildDestination": "app_build",
+    "keyPath": "KEYPATH",
+    "alias": "PROJECT_ALIAS"
+}

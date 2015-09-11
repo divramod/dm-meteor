@@ -1,0 +1,34 @@
+<template name="footer">
+    <nav class="ka-footer navbar navbar-inverse navbar-fixed-bottom">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-3 dropup navbar-icon-dropup-container">
+                    <i class="fa fa-2x fa-arrow-left dropdown-toggle" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                        <li><a href="#">Something else here</a>
+                        </li>
+                        <li><a href="#">Separated link</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-xs-3 navbar-icon-container">
+                    <a class="btn" href="{{pathFor 'home'}}">
+                        <i class="fa fa-2x fa-home"></i>
+                    </a>
+                </div>
+                <div class="col-xs-3 navbar-icon-container">
+                    <a class="btn" href="{{pathFor 'settings'}}">
+                        <i class="fa fa-2x fa-wrench"></i>
+                    </a>
+                </div>
+                <div class="col-xs-3 navbar-icon-container">
+                    <a class="btn" href="{{pathFor 'user'}}">
+                        <i class="fa fa-2x fa-sign-in"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </nav>
+</template>

@@ -179,8 +179,6 @@ job.start = co.wrap(function*() {
             console.log(message);
         }
 
-
-
     } catch (e) {
         console.log("Filename: ", __filename, "\n", e.stack);
     }
