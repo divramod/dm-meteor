@@ -142,44 +142,49 @@ function run(answers) {
     });
 
     co(function*() {
+        try {
 
-        // =========== [ create key ] ===========
-        yield require("./../createKey/index.js").start(answers.projectName, answers.keyPath);
 
-        // =========== [ create meteor project ] ===========
+            // =========== [ create key ] ===========
+            yield require("./../createKey/index.js").start(answers.projectName, answers.keyPath);
 
-        command = "cd .. && ls && meteor create " + answers.projectName + "_";
-        spawn(command);
+            // =========== [ create meteor project ] ===========
 
-        command = "cp -r " + answers.projectDirectory + "_/.meteor " + answers.projectDirectory;
-        spawn(command);
+            var command = "cd .. && ls && meteor create " + answers.projectName + "_";
+            spawn(command);
 
-        command = "rm -rf " + answers.projectDirectory + "_";
-        spawn(command);
+            command = "cp -r " + answers.projectDirectory + "_/.meteor " + answers.projectDirectory;
+            spawn(command);
 
-        // =========== [ update meteor ] ===========
-        command = "meteor update --release METEOR@1.2-rc.7";
-        spawn(command);
+            command = "rm -rf " + answers.projectDirectory + "_";
+            spawn(command);
 
-        // =========== [ install packages ] ===========
-        spawn("meteor add iron:router");
-        spawn("meteor add less");
-        spawn("meteor add twbs:bootstrap");
-        spawn("meteor add fortawesome:fontawesome");
-        spawn("meteor add accounts-ui");
-        spawn("meteor add accounts-password");
+            // =========== [ update meteor ] ===========
+            command = "meteor update --release METEOR@1.2-rc.7";
+            spawn(command);
 
-        // =========== [ remove packages ] ===========
-        spawn("meteor remove insecure");
-        spawn("meteor remove autopublish");
+            // =========== [ install packages ] ===========
+            spawn("meteor add iron:router");
+            spawn("meteor add less");
+            spawn("meteor add twbs:bootstrap");
+            spawn("meteor add fortawesome:fontawesome");
+            spawn("meteor add accounts-ui");
+            spawn("meteor add accounts-password");
 
-        // =========== [ add platform android ] ===========
-        command = "meteor add-platform android";
-        spawn(command);
+            // =========== [ remove packages ] ===========
+            spawn("meteor remove insecure");
+            spawn("meteor remove autopublish");
 
-        // =========== [ run ] ===========
-        command = "meteor run android-device";
-        spawn(command);
+            // =========== [ add platform android ] ===========
+            command = "meteor add-platform android";
+            spawn(command);
+
+            // =========== [ run ] ===========
+            command = "meteor run android-device";
+            spawn(command);
+        } catch (e) {
+            console.log("Filename: ", __filename, "\n", e.stack);
+        }
 
     });
 }
