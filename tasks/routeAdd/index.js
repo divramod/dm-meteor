@@ -19,7 +19,7 @@ task.start = function(projectDirectoryPath) {
         }
 
         // =========== [ proof if current directory has folder client/views/routes ] ===========
-        var routesDirectoryPath = path.resolve(projectDirectoryPath, "client", "views", "routes");
+        var routesDirectoryPath = path.resolve(projectDirectoryPath, "client", "routes");
         var pathExistent = true;
         if (!test("-d", routesDirectoryPath)) {
             pathExistent = false;
