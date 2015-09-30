@@ -18,6 +18,32 @@ npm install dm-meteor -g
 
 ## Tasks
 
+### [add](tasks/add/index.js)
+* make it possible to add a lot of things to a meteor project
+
+#### add global usage
+```
+dmm [add]
+```
+
+#### add programmatically usage
+```javascript
+var add = require("dm-meteor").add;
+var addResult = add.start();
+```
+
+#### add steps
+
+#### add features
+
+#### add config
+```javascript
+{
+    "add": {
+    }
+}
+```
+
 ### [routeAdd](tasks/routeAdd/index.js)
 * Adds a route to a meteor application
 

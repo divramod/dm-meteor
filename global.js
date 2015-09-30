@@ -16,7 +16,12 @@ jobs.index = co.wrap(function*() {
         }
 
         // automatically add tasks here
-        
+
+        // =========== [ add ] ===========
+        else if (['add'].indexOf(argv2) > -1) {
+            var task = require("./tasks/add/index.js");
+            task.start();
+        }        
 
         // =========== [ routeAdd ] ===========
         else if (['routeAdd','ra'].indexOf(argv2) > -1) {
