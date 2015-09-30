@@ -1,0 +1,51 @@
+<!-- ROUTENAMEPLURALL Home  -->
+<template name='ROUTENAMEPLURALHome'>
+  {{> ROUTENAMEPLURALCreate}}
+  {{> ROUTENAMEPLURALList}}
+</template>
+
+<!-- ROUTENAMEPLURALL List  -->
+<template name="ROUTENAMEPLURALList">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <td>Example</td>
+        <td class="hidden-xs">Example hidden xs</td>
+        <td>Aktionen</td>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each ROUTENAMEPLURAL}}
+        <tr>
+          <td>{{example}}</td>
+          <td class="hidden-xs">{{exampleHiddenXs}}</td>
+          <td>
+            <button class="buchen">Buchen</button>
+            <a class="button" href="/transaction/{{_id}}">Bearbeiten</a>
+            <button class="loeschen">Löschen</button>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</template>
+
+<!-- insertTransactionForm  -->
+<template name="insertTransactionForm">
+  {{> quickForm collection="Transaction" schema="TransactionSchema" id="insertTransactionForm" type="insert"}}
+</template>
+
+<!-- insertTransactionFormShort  -->
+<template name="insertTransactionFormShort">
+  {{> quickForm collection="Transaction" schema="TransactionShortSchema" id="insertTransactionFormShort" type="insert"}}
+</template>
+
+<!-- insertTransactionFormShortCustom  -->
+<template name="insertTransactionFormShortCustom">
+  {{> quickForm collection="Transaction" schema="TransactionShortSchema" id="insertTransactionFormShort" type="insert"}}
+</template>
+
+<!-- updateTransactionForm  -->
+<template name="updateTransactionForm">
+  {{> quickForm collection="Transaction" schema="TransactionSchema" doc=this id="updateTransactionForm" type="update"}}
+</template>
