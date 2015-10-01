@@ -1,5 +1,5 @@
 // =========== [ PLURAL default schema ] ===========
-PLURALCSchema = new SimpleSchema({
+PLURALSchema = new SimpleSchema({
   title: {
     type: String,
     optional: false
@@ -8,6 +8,6 @@ PLURALCSchema = new SimpleSchema({
 
 // =========== [ PLURAL default schema i18n ] ===========
 Meteor.startup(function() {
-  PLURALCSchema.i18n("schemas.PLURAL");
-  PLURALC.attachSchema(PLURALCSchema);
+  PLURALSchema.i18n("schemas.PLURAL");
+  PLURAL.attachSchema(PLURALSchema);
 });

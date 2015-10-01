@@ -1,4 +1,4 @@
 // =========== [ PLURALList events ] ===========
-Template.PLURALList.events({
+Template.PLURALListAll.events({
 
 });

@@ -1,4 +1,4 @@
 // =========== [ PLURALList helpers ] ===========
-Template.PLURALList.helpers({
+Template.PLURALListAll.helpers({
 
 });
