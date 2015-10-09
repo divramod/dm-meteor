@@ -10,7 +10,7 @@ Meteor.methods({
     PLURAL.insert(doc);
   },
   // =========== [ PLURALUpdate] ===========
-  PLURALUpdate: function(id, doc) {
+  PLURALUpdate: function(doc, id) {
     PLURAL.update(id, doc);
   },
   // =========== [ PLURALRemove ] ===========

@@ -18,6 +18,8 @@ require("shelljs/global");
 
 // =========== [ MODULE DEFINE ] ===========
 var task = {};
+var projectPath = "";
+var replacerObject = {};
 
 // =========== [ SYNC task.start() ] ===========
 task.start = function() {
@@ -33,7 +35,8 @@ task.start = function() {
       .option('-c, --collection [value]', '/lib/collections/NAME/ (c)ollection/(m)ethods/(s)chemas/(t)ables/sec(u)rity/! default: cmstu', 'cmstu')
       .option('-s, --styles [value]', '/client/routes/ROUTENAME/styles/NAME css|less', "cl")
       .option('-p, --pubsub [value]', 'Add (p)ublication/(s)ubscription! default: ps', 'ps')
-      .option('-i, --i18n [value]', 'Add (n)av/(r)outes/(s)chema! default: nrs', 'nrs')
+      .option('-i, --i18n [value]', 'Add (n)av/(r)outes/(s)chema! default: nrs', '')
+      .option('-n, --nav [value]', 'Add Links to Navigation value list: file Name in /client/navigation ie: test,settings', '')
       .parse(process.argv);
 
     // =========== [ show help ] ===========
@@ -115,8 +118,9 @@ function crud(program) {
 // add hooks for removing
 function crudCreate(program, actions) {
   // def
-  var projectPath = process.cwd();
+  projectPath = process.cwd();
   var routeInformation = getFormatedRouteInformation(program);
+  replacerObject = getFormatedRouteInformation(program);
   var replaceArray = getReplaceArray(routeInformation);
 
   // =========== [ routes: /client/routes.js ] ===========
@@ -173,27 +177,117 @@ function crudCreate(program, actions) {
   };
   copyAndReplaceFiles(replaceArray, styleFileNames, styleFileTemplatesDirectoryPath, styleFilesDestinationPath, styleFileMapper);
 
-  // =========== [ subscription (pubsub): /client/lib/subscriptions ] ===========
-  //TODO addToFile
+  // =========== [ publication (pubsub): /server/lib/publications ] ===========
+  var pubFileNames = actions.pubsub;
+  var pubFileTemplatesDirectoryPath = path.resolve(__dirname, "templates", "blaze", "publication");
+  var pubFilesDestinationPath = path.resolve(projectPath, "server", "lib", "publications");
+  var pubFileMapper = {
+    "p": "PLURAL"
+  };
+  copyAndReplaceFiles(replaceArray, pubFileNames, pubFileTemplatesDirectoryPath, pubFilesDestinationPath, pubFileMapper);
 
-  // =========== [ publications (pubsub): /server/publications ] ===========
-  //TODO addToFile
-
-  // =========== [ i18n: /i18n ] ===========
-  //TODO addToFile
-  var projectLanguages = getProjectLanguages();
+  // =========== [ publication (pubsub): /server/lib/publications ] ===========
+  var subFileNames = actions.pubsub;
+  var subFileTemplatesDirectoryPath = path.resolve(__dirname, "templates", "blaze", "subscription");
+  var subFilesDestinationPath = path.resolve(projectPath, "client", "lib", "subscriptions");
+  var subFileMapper = {
+    "s": "PLURAL"
+  };
+  copyAndReplaceFiles(replaceArray, subFileNames, subFileTemplatesDirectoryPath, subFilesDestinationPath, subFileMapper);
 
   // =========== [ navigation ] ===========
-  //TODO addToFile
-  //value: "menu_meta_data",
-  //name: "menu_dynamic_data",
-  //name: "menu_test",
+  var navNames = list(actions.nav);
+  for (var i = 0, l = navNames.length; i < l; i++) {
+    var fileName = navNames[i] + ".html";
+    var hook = "<!-- AUTOMATICALLY ADD HERE -->";
+    var filePath = path.resolve(projectPath, "client", "navigation", fileName);
+    var insertString = '      <li class="{{isActive ' + "\'PLURALC\'" + '}}"><a href="{{pathFor ' + "\'PLURAL\'" + '}}">{{_ ' + "\'nav.PLURAL.plural\'}}</a></li>\n      " + hook + "\n";
+    addToFile(filePath, hook, insertString, replaceArray);
+  }
 
+  // =========== [ i18n: /i18n ] ===========
+  var i18nFileNames = actions.i18n;
+  if (i18nFileNames) {
+    var i18nFileMapper = {
+      "n": "nav",
+      "r": "routes",
+      "s": "schemas"
+    };
+    i18nHelper(i18nFileMapper, i18nFileNames);
+  }
+}
+
+// =========== [ i18nHelper() ] ===========
+function i18nHelper(i18nFileMapper, i18nFileNames) {
+  var projectLanguages = getProjectLanguages();
+
+  //TODO read language specific strings
+  var questions = [];
+  for (var i = 0, l = projectLanguages.length; i < l; i++) {
+    var pl = projectLanguages[i];
+    console.log(pl);
+    questions.push({
+      type: "input",
+      name: pl + "SINGULAR",
+      message: pl + "SINGULAR"
+    });
+    questions.push({
+      type: "input",
+      name: pl + "PLURAL",
+      message: pl + "PLURAL"
+    });
+  }
+
+  inquirer.prompt(questions, function(i18nStrings) {
+    // =========== [ create capitalized and non capitalized strings ] ===========
+    //TODO
+    var replaceArray = getReplaceArray(replacerObject);
+    var replaceI18nArray = getReplaceI18nArray(i18nStrings);
+    var replaceCompleteArray = replaceI18nArray.concat(replaceArray);
+
+    for (var i = 0, l = i18nFileNames.length; i < l; i++) {
+      if (i18nFileMapper[i18nFileNames[i]]) {
+        for (var ii = 0, ll = projectLanguages.length; ii < ll; ii++) {
+          var pl = projectLanguages[ii];
+          var fileName = i18nFileMapper[i18nFileNames[i]] + "." + pl + ".i18n.json";
+          var filePath = path.resolve(projectPath, "i18n", fileName);
+          var i18nTemplatePath = path.resolve(__dirname, "templates", "blaze", "i18n", fileName);
+          if (test("-f", filePath) && test("-f", i18nTemplatePath)) {
+            var hook = '"AUTOMATICALLY": {}';
+            var insertString = replaceInString(cat(i18nTemplatePath), replaceCompleteArray);
+            addToFile(filePath, hook, insertString, replaceCompleteArray);
+          }
+        }
+      }
+    }
+  });
+}
+
+// =========== [ getReplaceI18nArray(replacer) ] ===========
+function getReplaceI18nArray(replacerObject) {
+  var replaceArray = [];
+  for (var key in replacerObject) {
+    if (replacerObject.hasOwnProperty(key)) {
+      var obj = replacerObject[key];
+      var cap = obj.charAt(0).toUpperCase() + obj.slice(1);
+      replaceArray.push([key + "C", cap]);
+      replaceArray.push([key, obj.toLowerCase()]);
+    }
+  }
+  return replaceArray;
+}
+
+// =========== [ commander helper to split list arguments ] ===========
+function list(val) {
+  return val.split(',');
 }
 
 // =========== [ addToFile() ] ===========
-function addToFile(filePath, hook, insertString) {
-
+function addToFile(filePath, hook, insertString, replaceArray) {
+  if (test("-f", filePath)) {
+    var newString = replaceInString(insertString, replaceArray);
+    sed('-i', /.*AUTOMATICALLY.*\n/, newString, filePath);
+  }
 }
 
 // =========== [ copyAndReplaceFiles() ] ===========
@@ -207,17 +301,20 @@ function copyAndReplaceFiles(replaceArray, fileNames, fileTemplatesDirectoryPath
   var backupTime = moment().format("YYYYMMDD_HHmmss");
   // run through passed routes
   for (var i = 0, l = fileNames.length; i < l; i++) {
-    var route = fileNames[i];
+    var file = fileNames[i];
 
-    // test if route is passed
-    if (fileMapper[route]) {
+    // test if file is passed
+    if (fileMapper[file]) {
       // srcFiles
-      var templatesSearchGlob = path.resolve(fileTemplatesDirectoryPath, fileMapper[route] + ".*");
+      var templatesSearchGlob = path.resolve(fileTemplatesDirectoryPath, fileMapper[file] + ".*");
+
       var templateFiles = ls(templatesSearchGlob);
 
       for (var ii = 0, ll = templateFiles.length; ii < ll; ii++) {
         var templateFilePath = templateFiles[ii];
         var destFilePath = path.resolve(filesDestinationPath, templateFilePath.substring(templateFilePath.lastIndexOf("/") + 1, templateFilePath.length));
+
+        destFilePath = replaceInString(destFilePath, replaceArray);
 
         // test if destFilePath existing, if yes mv file to backup
         if (test("-f", destFilePath)) {
@@ -234,7 +331,18 @@ function copyAndReplaceFiles(replaceArray, fileNames, fileTemplatesDirectoryPath
       }
     }
   }
-  
+}
+
+// =========== [ replaceInString ] ===========
+function replaceInString(originalString, replaceArray) {
+  var replacedString = originalString;
+  for (var i = 0, l = replaceArray.length; i < l; i++) {
+    var replacer = replaceArray[i];
+    var find = replacer[0];
+    var re = new RegExp(find, 'g');
+    replacedString = replacedString.replace(re, replacer[1]);
+  }
+  return replacedString;
 }
 
 // =========== [ getReplaceArray() ] ===========

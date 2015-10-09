@@ -1,0 +1,9 @@
+    "PLURAL": {
+      "delete": "delete enSINGULAR",
+      "edit": "edit enSINGULAR",
+      "home": "enPLURAL home",
+      "list": "enPLURAL list",
+      "new": "create enSINGULAR",
+      "show": "show enSINGULAR"
+    },
+    "AUTOMATICALLY": {}
